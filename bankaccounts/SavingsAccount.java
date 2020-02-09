@@ -1,5 +1,8 @@
 package fr.cnam.tp8.bankaccounts;
 
+import fr.cnam.tp8.bankaccounts.exceptions.*;
+
+
 /**
  * ____________________________________________________________________________________________<br
  * NFP121:TP6 <br>
@@ -9,7 +12,7 @@ package fr.cnam.tp8.bankaccounts;
  * La classe SavingsAccount Modelise un Livret A Bancaire  <br>
  * ____________________________________________________________________________________________<br>
  */
-public class SavingsAccount extends CheckingAccount {
+public class SavingsAccount  {
     /**
      * Constante de classe pour definir le solde maximum que peut atteidre un livret A (Hors interets)
      */
@@ -21,12 +24,17 @@ public class SavingsAccount extends CheckingAccount {
     private static final double INTERESTRATE = 1;
 
     /**
+     * Attribute to decorate Checking Account
+     */
+
+    private CheckingAccount checkingAccount;
+    /**
      * Constructeur de notre Livret A
      *
-     * @param a_Owner : La Personne titulaire du Livret A
      */
-    public SavingsAccount(Person a_Owner) {
-        super(a_Owner);
+    public SavingsAccount(Person owner) {
+
+        this.checkingAccount = new CheckingAccount(owner);
     }
 
     /**
@@ -35,15 +43,12 @@ public class SavingsAccount extends CheckingAccount {
      * @param a_Amount : la somme a crediter sur notre Compte Simple
      */
 
-    @Override
-    public void credit(double a_Amount) {
-        assert (this.getAmount() + a_Amount) <= MAXAMOUNT : "Cannot Credit this Amount due to Maximum Amount will not be respected";
-        // if ((this.getAmount() + a_Amount) <= MAXAMOUNT){
-        super.credit(a_Amount);
-  /*  }
-    else {
-      System.out.println("Cannot Credit this Amount due to Maximum Amount will not be respected");
-    }*/
+
+    public void credit(double a_Amount) throws LimitExceededException, AmountException {
+        if ((this.checkingAccount.getAmount() + a_Amount) > MAXAMOUNT)
+            throw new LimitExceededException();
+
+        this.checkingAccount.credit(a_Amount);
     }
 
     /**
@@ -52,21 +57,56 @@ public class SavingsAccount extends CheckingAccount {
      * @param a_Amount : la somme a debiter de notre Compte Simple
      */
 
-    @Override
-    public void debit(double a_Amount) {
-        assert this.getAmount() - a_Amount >= 0 : "No enough Credit";
-        //  if(this.getAmount()-a_Amount>=0){
-        super.debit(a_Amount);
-   /* }
-    else {
-      System.out.println("No enough Credit");
-    }*/
+    public void debit(double a_Amount) throws AmountException {
+        this.checkingAccount.withdraw((int)a_Amount);
     }
 
     /**
      * Methode qui permet d'appliquer le taux d'interets a notre Livret A.
      */
     public void applyInterest() {
-        this.solde += this.solde * INTERESTRATE / 100;
+        try {
+            this.checkingAccount.credit(this.checkingAccount.getBalance()* INTERESTRATE / 100);
+        } catch (AmountException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /**
+     * Methode qui permet d'afficher notre Compte Simple sur la cosol
+     *
+     * @return : La chaine de caracteres representant notre Compte Simple
+     */
+    public String toString() {
+        return this.checkingAccount.toString();
+    }
+
+    /**
+     * Methode qui permet d'obtenir le solde de notre Compte Simple
+     *
+     * @return : Le solde de notre Compte Simple
+     */
+    public double getAmount() {
+        return this.checkingAccount.getAmount();
+    }
+
+    /**
+     * Methode qui permet d'obtenir le solde de notre Compte Simple
+     *
+     * @return : Le solde de notre Compte Simple
+     */
+    public int getBalance() {
+        return this.checkingAccount.getBalance();
+    }
+
+    /**
+     * Methode qui permet d'obtenir le stitulaire de notre Compte Simple
+     *
+     * @return : Le titulaire de notre Compte Simple
+     */
+    public Person getOwner() {
+        return this.checkingAccount.getOwner();
     }
 }

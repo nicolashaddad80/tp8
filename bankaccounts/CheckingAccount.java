@@ -1,5 +1,6 @@
 package fr.cnam.tp8.bankaccounts;
 
+
 import fr.cnam.tp8.bankaccounts.exceptions.AmountException;
 
 /**
@@ -62,12 +63,8 @@ public class CheckingAccount extends SimpleAccount {
      * @param a_Amount : la somme a crediter sur notre Compte Simple
      */
     @Override
-    public void credit(double a_Amount) {
-        try {
-            super.credit(a_Amount);
-        } catch (AmountException e) {
-            e.printStackTrace();
-        }
+    public void credit(double a_Amount) throws AmountException {
+        super.credit(a_Amount);
         this.accountStatement.addOperation(a_Amount);
     }
 
