@@ -1,5 +1,6 @@
 package fr.cnam.tp8.bankaccounts;
 
+import fr.cnam.tp8.bankaccounts.exceptions.AmountException;
 import fr.cnam.tp8.bankaccounts.exceptions.InitialBalanceException;
 import fr.cnam.tp8.bankaccounts.exceptions.InvalidOwnerException;
 
@@ -58,8 +59,11 @@ public class SimpleAccount {
      *
      * @param a_Amount : la somme a crediter sur notre Compte Simple
      */
-    public void credit(double a_Amount) {
-        this.solde += a_Amount;
+    public void credit(double a_Amount) throws AmountException {
+        if (a_Amount < 0)
+            throw new AmountException("Le Credit a depose doit etre strictement positif",(int) Math.round(this.solde));
+        else
+            this.solde += a_Amount;
     }
 
     /**
@@ -71,8 +75,11 @@ public class SimpleAccount {
         this.solde -= a_Amount;
     }
 
-    public void withdraw(int a_Amount) {
-        this.solde -= a_Amount;
+    public void withdraw(int a_Amount) throws AmountException {
+       if (this.solde < a_Amount)
+            throw new AmountException("Solde insuffisant pour ce retrait",a_Amount);
+
+       this.solde -= a_Amount;
     }
 
     /**

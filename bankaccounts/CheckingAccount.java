@@ -1,5 +1,7 @@
 package fr.cnam.tp8.bankaccounts;
 
+import fr.cnam.tp8.bankaccounts.exceptions.AmountException;
+
 /**
  * ____________________________________________________________________________________________<br
  * NFP121:TP6 <br>
@@ -61,7 +63,11 @@ public class CheckingAccount extends SimpleAccount {
      */
     @Override
     public void credit(double a_Amount) {
-        super.credit(a_Amount);
+        try {
+            super.credit(a_Amount);
+        } catch (AmountException e) {
+            e.printStackTrace();
+        }
         this.accountStatement.addOperation(a_Amount);
     }
 
