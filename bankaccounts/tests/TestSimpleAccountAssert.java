@@ -2,6 +2,7 @@ package fr.cnam.tp8.bankaccounts.tests;
 
 import fr.cnam.tp8.bankaccounts.Person;
 import fr.cnam.tp8.bankaccounts.SimpleAccount;
+import fr.cnam.tp8.bankaccounts.exceptions.AmountException;
 import fr.cnam.tp8.bankaccounts.exceptions.InitialBalanceException;
 import fr.cnam.tp8.bankaccounts.exceptions.InvalidOwnerException;
 
@@ -16,15 +17,28 @@ public class TestSimpleAccountAssert {
         } catch (InvalidOwnerException e) {
             e.printStackTrace();
         }
+        assert true;
         assert sa1.getBalance() == 1000;
-        sa1.credit(100);
+        try {
+            sa1.credit(100);
+        } catch (AmountException e) {
+            e.printStackTrace();
+        }
         assert sa1.getBalance() == 1100;
-        sa1.withdraw(2000);
-        assert sa1.getBalance() == -900;
+        try {
+            sa1.withdraw(2000);
+        } catch (AmountException e) {
+            e.printStackTrace();
+        }
+        assert sa1.getBalance() == 1100;
 
         SimpleAccount sa2 = new SimpleAccount(p1);
         assert sa2.getBalance() == 0;
-        sa2.credit(100);
+        try {
+            sa2.credit(100);
+        } catch (AmountException e) {
+            e.printStackTrace();
+        }
         assert sa2.getBalance() == 100;
     }
 }
