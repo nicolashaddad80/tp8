@@ -32,7 +32,7 @@ public class SimpleAccount {
      */
 
 
-    public SimpleAccount(Person p1, int i) {
+    public SimpleAccount(Person p1, int i) throws InitialBalanceException, InvalidOwnerException {
         if (p1 == null)
             throw new InvalidOwnerException();
         else if (i < 0)
