@@ -25,11 +25,12 @@ public class TestSimpleAccountAssert {
             e.printStackTrace();
         }
         assert sa1.getBalance() == 1100;
-        try {
-            sa1.withdraw(2000);
-        } catch (AmountException e) {
-            e.printStackTrace();
-        }
+        if (sa1.getBalance() >= 2000)
+            try {
+                sa1.withdraw(2000);
+            } catch (AmountException e) {
+                e.printStackTrace();
+            }
         assert sa1.getBalance() == 1100;
 
         SimpleAccount sa2 = new SimpleAccount(p1);
